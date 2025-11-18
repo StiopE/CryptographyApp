@@ -1,6 +1,6 @@
 # CryptographyApp
 
-##⚙️ Features
+## ⚙️ Features
 
 * Intuitive Decryption: Easily decrypt messages back into readable text using the correct password.
 * Clean CustomTkinter Interface: A modern, customizable dark/light mode UI built on top of Tkinter for native look and feel.
