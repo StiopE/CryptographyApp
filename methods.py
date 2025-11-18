@@ -36,8 +36,7 @@ def perform_decryption():
 
 
 
-# Open encryptic window
-def encrypt():
+# Open encrypt window
 def encrypt_window():
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -70,29 +69,29 @@ def encrypt_window():
     entry_encrypt = ctk.CTkEntry(root1, placeholder_text="Enter message")
     entry_encrypt.grid(row = 1, column=3)
     
-    label_password = ctk.CTkLabel(root1, text="Enter password:")
-    label_password.grid(row=2, column=1)
+    
         
     
-    entry_password = ctk.CTkEntry(root1, placeholder_text="Enter password")
-    entry_password.grid(row=2, column=3)
     
     
-    submit_button = ctk.CTkButton(root1, text="Submit")
+    
+    submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
     submit_button.grid(row=4, column=2)
+    message_to_encrypt = entry_encrypt.get()
+    
     
     
     
     root1.mainloop()
-    
-def generate_key():
-    return Fernet.generate_key()
 
-def encrypt(message, key):
-    f = Fernet(key)
+#Encrypt
+def encrypt(message):
+    f = Fernet.generate_key()
     
     encrypted_message = f.encrypt(message.encode())
     return encrypted_message
+
+
 
 
     
