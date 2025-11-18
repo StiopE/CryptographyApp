@@ -1,6 +1,5 @@
 import customtkinter as ctk
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
+
 import methods
 
 
@@ -21,7 +20,7 @@ root.grid_columnconfigure(4, weight=1)
 
 root.grid_rowconfigure(0, weight=0)
 root.grid_rowconfigure(1, weight=1)
-root.grid_rowconfigure(2, weight=1)
+root.grid_rowconfigure(2, weight=0)
 root.grid_rowconfigure(3, weight=1)
 root.grid_rowconfigure(4, weight=1)
 
@@ -33,7 +32,7 @@ menu_text2 = ctk.CTkLabel(root, text="Would you like to Encrypt or Decrypt?", fo
 menu_text2.grid(row=1, column =2)
     
 #2 Options, Encrypt of Decrypt
-encryptOption = ctk.CTkButton(root, text="Encrypt", command=methods.encrypt)
+encryptOption = ctk.CTkButton(root, text="Encrypt", command=methods.encrypt_window)
 encryptOption.grid(row=2, column=2)
 decryptOption = ctk.CTkButton(root, text="Decrypt")
 decryptOption.grid(row=3, column=2)
