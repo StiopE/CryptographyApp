@@ -3,52 +3,35 @@ from cryptography.fernet import Fernet
 
 # Open decryptic window
 def decrypt_window():
-    
-    
     def decrypt():
-        
-        #Making new window for decrypt
+        # Making new window for decrypt
         root4 = ctk.CTk()
         root4.title="Decrypted message"
         root4.geometry('200x200')
         
-        root4.grid_columnconfigure(1, weight=1)
-        root4.grid_columnconfigure(0, weight=1)
-        root4.grid_columnconfigure(2, weight=1)
-        root4.grid_columnconfigure(3, weight=1)
-        root4.grid_columnconfigure(4, weight=1)
+        # LIST
+        indices = [0, 1, 2, 3, 4] 
+        for i in indices:
+            root4.grid_columnconfigure(i, weight=1)
+            root4.grid_rowconfigure(i, weight=1)
         
-        root4.grid_rowconfigure(0, weight=0)
-        root4.grid_rowconfigure(1, weight=1)
-        root4.grid_rowconfigure(2, weight=1)
-        root4.grid_rowconfigure(3, weight=1)
-        root4.grid_rowconfigure(4, weight=1)
-        
-        
-        #Make the key into bytes
+        # Make the key into bytes
         key = entry_password.get()
-        
         ciphertext = entry_decrypt.get()
+        
         f = Fernet(key.encode())
         
-        #Decrypt ciphertext into bytes
+        # Decrypt ciphertext into bytes
         decrypted_bytes = f.decrypt(ciphertext.encode())
         
-        #Plaintext decrypted_bytes
-        
+        # Plaintext decrypted_bytes
         decrypted_plaintext = decrypted_bytes.decode()
         
         final_decrypted_message = ctk.CTkLabel(root4, text=f'Decrypted message: {decrypted_plaintext}')
         final_decrypted_message.grid(row=0, column=1)
         
+        root4.mainloop()
         
-        
-        
-        
-        
-        
-    
-    
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
     
@@ -56,23 +39,17 @@ def decrypt_window():
     root2.title("Decryption Menu")
     root2.geometry('600x400')
     
-    # Adding padding system
-    root2.grid_columnconfigure(0, weight=1)
-    root2.grid_columnconfigure(1, weight=1)
-    root2.grid_columnconfigure(2, weight=1)
-    root2.grid_columnconfigure(3, weight=1)
-    root2.grid_columnconfigure(4, weight=1)
+    # Adding padding system LIST
+    indices = [0, 1, 2, 3, 4] 
+    for i in indices:
+        root2.grid_columnconfigure(i, weight=1)
+        root2.grid_rowconfigure(i, weight=1)
     
-    root2.grid_rowconfigure(0, weight=0)
-    root2.grid_rowconfigure(1, weight=1)
-    root2.grid_rowconfigure(2, weight=1)
-    root2.grid_rowconfigure(3, weight=1)
-    root2.grid_rowconfigure(4, weight=1)
-    
-    decrypt_label2 = ctk.CTkLabel(root2, text= "Decryption", font=("Helvetica", 20))
+    # TUPLE
+    header_font_style = ("Helvetica", 20) 
+    decrypt_label2 = ctk.CTkLabel(root2, text= "Encryption", font=header_font_style)
     decrypt_label2.grid(row = 0, column = 2)
    
-    
     label_message = ctk.CTkLabel(root2, text="Enter text to decrypt:")
     label_message.grid(row=1, column=1)
     
@@ -90,37 +67,26 @@ def decrypt_window():
     
     root2.mainloop()
 
+
 # Open encryptic window
 def encrypt_window():
-    
-    
     def encrypt():
+        # Generate key and ciphertext
         message_to_encrypt = entry_encrypt.get()
         key = Fernet.generate_key()
         f = Fernet(key)
     
-        encrypted_message = f.encrypt(message_to_encrypt.encode())
-        #Key and ciphertext output
-        
+        encrypted_message = f.encrypt(message_to_encrypt.encode())      
         
         # Make a new window to not break the encrypt window
-        
         root3 = ctk.CTk()
         root3.title("Ciphertext and Key")
         root3.geometry('1000x200')
         
-        root3.grid_columnconfigure(0, weight=1)
-        root3.grid_columnconfigure(1, weight=1)
-        root3.grid_columnconfigure(2, weight=1)
-        root3.grid_columnconfigure(3, weight=1)
-        root3.grid_columnconfigure(4, weight=1)
-        
-        root3.grid_rowconfigure(0, weight=1)
-        root3.grid_rowconfigure(1, weight=1)
-        root3.grid_rowconfigure(2, weight=1)
-        root3.grid_rowconfigure(3, weight=1)
-        root3.grid_rowconfigure(4, weight=1)
-        
+        indices = [0, 1, 2, 3, 4] 
+        for i in indices:
+            root3.grid_columnconfigure(i, weight=1)
+            root3.grid_rowconfigure(i, weight=1)
         
         encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
         encrypted_message_label.grid(row=0, column=0, sticky='ew')
@@ -140,9 +106,7 @@ def encrypt_window():
         warning_message_label = ctk.CTkLabel(root3, text="Copy the key to ensure decryption")
         warning_message_label.grid(row=3, column=0)
         
-        
         root3.mainloop()
-        
         
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -151,23 +115,17 @@ def encrypt_window():
     root1.title("Encryption Menu")
     root1.geometry('600x400')
     
+    # Adding padding system with LIST
+    indices = [0, 1, 2, 3, 4] 
+    for i in indices:
+        root1.grid_columnconfigure(i, weight=1)
+        root1.grid_rowconfigure(i, weight=1)
     
-    #Adding padding system
-    root1.grid_columnconfigure(0, weight=1)
-    root1.grid_columnconfigure(1, weight=1)
-    root1.grid_columnconfigure(2, weight=1)
-    root1.grid_columnconfigure(3, weight=1)
-    root1.grid_columnconfigure(4, weight=1)
-
-    root1.grid_rowconfigure(0, weight=1)
-    root1.grid_rowconfigure(1, weight=1)
-    root1.grid_rowconfigure(2, weight=1)
-    root1.grid_rowconfigure(3, weight=1)
-    root1.grid_rowconfigure(4, weight=1)
+    # Store font setting in a TUPLE
+    header_font_style = ("Helvetica", 20) 
+    encrypt_label1 = ctk.CTkLabel(root1, text= "Encryption", font=header_font_style)
     
-    encrypt_label1 = ctk.CTkLabel(root1, text= "Encryption", font=("Helvetica", 20))
     encrypt_label1.grid(row = 0, column = 2)
-    
     
     label_message = ctk.CTkLabel(root1, text="Enter text to encrypt:")
     label_message.grid(row=1, column=1)
@@ -175,10 +133,7 @@ def encrypt_window():
     entry_encrypt = ctk.CTkEntry(root1, placeholder_text="Enter message")
     entry_encrypt.grid(row = 1, column=3)
     
-    
-    
     submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
     submit_button.grid(row=3, column=2)
-    root1.mainloop()
-
     
+    root1.mainloop()
