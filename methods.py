@@ -52,6 +52,50 @@ def perform_decryption(key, password):
 
 # Open encryptic window
 def encrypt_window():
+    
+    
+    def encrypt():
+        message_to_encrypt = entry_encrypt.get()
+        key = Fernet.generate_key()
+        f = Fernet(key)
+    
+        encrypted_message = f.encrypt(message_to_encrypt.encode())
+        #Key and ciphertext output
+        
+        
+        # Make a new window to not break the encrypt window
+        
+        root3 = ctk.CTk()
+        root3.title("Ciphertext and Key")
+        root3.geometry('1000x200')
+        
+        root3.grid_columnconfigure(0, weight=1)
+        root3.grid_columnconfigure(1, weight=1)
+        root3.grid_columnconfigure(2, weight=1)
+        root3.grid_columnconfigure(3, weight=1)
+        root3.grid_columnconfigure(4, weight=1)
+        
+        root3.grid_rowconfigure(0, weight=1)
+        root3.grid_rowconfigure(1, weight=1)
+        root3.grid_rowconfigure(2, weight=1)
+        root3.grid_rowconfigure(3, weight=1)
+        root3.grid_rowconfigure(4, weight=1)
+        
+        
+        encrypted_message_label = ctk.CTkLabel(root3, text=f'Encrypted Message: {encrypted_message}')
+        encrypted_message_label.grid(row=0, column=0)
+        
+        
+        encrypted_key_label = ctk.CTkLabel(root3, text = f'Key used to encrypt: {key}')
+        encrypted_key_label.grid(row=2, column=0)
+        
+        warning_message_label = ctk.CTkLabel(root3, text="Copy the key to ensure decryption")
+        warning_message_label.grid(row=3, column=0)
+        
+        
+        root3.mainloop()
+        
+        
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
     
@@ -62,8 +106,8 @@ def encrypt_window():
     
     #Adding padding system
     root1.grid_columnconfigure(0, weight=1)
-    root1.grid_columnconfigure(1, weight=0)
-    root1.grid_columnconfigure(2, weight=0)
+    root1.grid_columnconfigure(1, weight=1)
+    root1.grid_columnconfigure(2, weight=1)
     root1.grid_columnconfigure(3, weight=1)
     root1.grid_columnconfigure(4, weight=1)
 
@@ -84,14 +128,21 @@ def encrypt_window():
     entry_encrypt.grid(row = 1, column=3)
     
     
+    
+    submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
+    submit_button.grid(row=3, column=2)
+    
+    
+    
+        
         
     
     
     
     
-    submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
-    submit_button.grid(row=4, column=2)
-    message_to_encrypt = entry_encrypt.get()
+    
+    
+    
     
     
     
@@ -99,11 +150,7 @@ def encrypt_window():
     root1.mainloop()
 
 #Encrypt
-def encrypt(message):
-    f = Fernet.generate_key()
-    
-    encrypted_message = f.encrypt(message.encode())
-    return encrypted_message
+
 
 
 

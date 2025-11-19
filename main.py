@@ -28,6 +28,8 @@ menu_text2 = ctk.CTkLabel(root, text="Would you like to Encrypt or Decrypt?", fo
 menu_text2.grid(row=1, column =2)
     
 # 2 Options, Encrypt of Decrypt
+
+#2 Options, Encrypt of Decrypt
 encryptOption = ctk.CTkButton(root, text="Encrypt", command=methods.encrypt_window)
 encryptOption.grid(row=2, column=2)
 decryptOption = ctk.CTkButton(root, text="Decrypt", command=methods.decrypt_window)
