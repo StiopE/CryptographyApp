@@ -3,6 +3,52 @@ from cryptography.fernet import Fernet
 
 # Open decryptic window
 def decrypt_window():
+    
+    
+    def decrypt():
+        
+        #Making new window for decrypt
+        root4 = ctk.CTk()
+        root4.title="Decrypted message"
+        root4.geometry('200x200')
+        
+        root4.grid_columnconfigure(1, weight=1)
+        root4.grid_columnconfigure(0, weight=1)
+        root4.grid_columnconfigure(2, weight=1)
+        root4.grid_columnconfigure(3, weight=1)
+        root4.grid_columnconfigure(4, weight=1)
+        
+        root4.grid_rowconfigure(0, weight=0)
+        root4.grid_rowconfigure(1, weight=1)
+        root4.grid_rowconfigure(2, weight=1)
+        root4.grid_rowconfigure(3, weight=1)
+        root4.grid_rowconfigure(4, weight=1)
+        
+        
+        #Make the key into bytes
+        key = entry_password.get()
+        
+        ciphertext = entry_decrypt.get()
+        f = Fernet(key.encode())
+        
+        #Decrypt ciphertext into bytes
+        decrypted_bytes = f.decrypt(ciphertext.encode())
+        
+        #Plaintext decrypted_bytes
+        
+        decrypted_plaintext = decrypted_bytes.decode()
+        
+        final_decrypted_message = ctk.CTkLabel(root4, text=f'Decrypted message: {decrypted_plaintext}')
+        final_decrypted_message.grid(row=0, column=1)
+        
+        
+        
+        
+        
+        
+        
+    
+    
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
     
@@ -33,22 +79,16 @@ def decrypt_window():
     entry_decrypt = ctk.CTkEntry(root2, placeholder_text="Enter message")
     entry_decrypt.grid(row = 1, column=3)
     
-    label_password = ctk.CTkLabel(root2, text="Enter password:")
+    label_password = ctk.CTkLabel(root2, text="Enter key:")
     label_password.grid(row=2, column=1)
     
-    entry_password = ctk.CTkEntry(root2, placeholder_text="Enter password")
+    entry_password = ctk.CTkEntry(root2, placeholder_text="Enter key")
     entry_password.grid(row=2, column=3)
     
-    submit_button = ctk.CTkButton(root2, text="Submit")
+    submit_button = ctk.CTkButton(root2, text="Submit", command=decrypt)
     submit_button.grid(row=4, column=2)
     
     root2.mainloop()
-
-# Do the decryption process
-def perform_decryption(key, password):
-    pass
-
-
 
 # Open encryptic window
 def encrypt_window():
@@ -82,12 +122,20 @@ def encrypt_window():
         root3.grid_rowconfigure(4, weight=1)
         
         
-        encrypted_message_label = ctk.CTkLabel(root3, text=f'Encrypted Message: {encrypted_message}')
-        encrypted_message_label.grid(row=0, column=0)
+        encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
+        encrypted_message_label.grid(row=0, column=0, sticky='ew')
+        
+        encrypted_message_label.configure(state="normal")
+        encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
+        encrypted_message_label.configure(state="readonly")
         
         
-        encrypted_key_label = ctk.CTkLabel(root3, text = f'Key used to encrypt: {key}')
-        encrypted_key_label.grid(row=2, column=0)
+        encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
+        encrypted_key_label.grid(row=2, column=0, sticky='ew')
+        
+        encrypted_key_label.configure(state="normal")
+        encrypted_key_label.insert(0, f'Key used to encrypt: {key}')
+        encrypted_key_label.configure(state="readonly")
         
         warning_message_label = ctk.CTkLabel(root3, text="Copy the key to ensure decryption")
         warning_message_label.grid(row=3, column=0)
@@ -131,37 +179,6 @@ def encrypt_window():
     
     submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
     submit_button.grid(row=3, column=2)
-    
-    
-    
-        
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     root1.mainloop()
 
-#Encrypt
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
