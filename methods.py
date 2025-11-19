@@ -3,13 +3,14 @@ from cryptography.fernet import Fernet
 
 # Open decryptic window
 def decrypt_window():
+    # Function to decrypt the ciphertext using the key
     def decrypt():
         # Making new window for decrypt
         root4 = ctk.CTk()
         root4.title="Decrypted message"
         root4.geometry('200x200')
         
-        # LIST
+        # Root window using LIST
         indices = [0, 1, 2, 3, 4] 
         for i in indices:
             root4.grid_columnconfigure(i, weight=1)
@@ -31,10 +32,12 @@ def decrypt_window():
         final_decrypted_message.grid(row=0, column=1)
         
         root4.mainloop()
-        
+    
+    # System settings 
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
     
+    # First window configuration
     root2 = ctk.CTk()
     root2.title("Decryption Menu")
     root2.geometry('600x400')
@@ -45,7 +48,7 @@ def decrypt_window():
         root2.grid_columnconfigure(i, weight=1)
         root2.grid_rowconfigure(i, weight=1)
     
-    # TUPLE
+    # Create buttons using TUPLE
     header_font_style = ("Helvetica", 20) 
     decrypt_label2 = ctk.CTkLabel(root2, text= "Encryption", font=header_font_style)
     decrypt_label2.grid(row = 0, column = 2)
@@ -70,6 +73,7 @@ def decrypt_window():
 
 # Open encryptic window
 def encrypt_window():
+    # Function to encrypt the plaintext
     def encrypt():
         # Generate key and ciphertext
         message_to_encrypt = entry_encrypt.get()
@@ -83,18 +87,19 @@ def encrypt_window():
         root3.title("Ciphertext and Key")
         root3.geometry('1000x200')
         
+        # Root window using LIST
         indices = [0, 1, 2, 3, 4] 
         for i in indices:
             root3.grid_columnconfigure(i, weight=1)
             root3.grid_rowconfigure(i, weight=1)
         
+        # Buttons setting
         encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
         encrypted_message_label.grid(row=0, column=0, sticky='ew')
         
         encrypted_message_label.configure(state="normal")
         encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
         encrypted_message_label.configure(state="readonly")
-        
         
         encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
         encrypted_key_label.grid(row=2, column=0, sticky='ew')
@@ -107,10 +112,12 @@ def encrypt_window():
         warning_message_label.grid(row=3, column=0)
         
         root3.mainloop()
-        
+    
+    # System settings
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
     
+    # First encryption window
     root1 = ctk.CTk()
     root1.title("Encryption Menu")
     root1.geometry('600x400')
