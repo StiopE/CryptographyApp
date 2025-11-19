@@ -5,7 +5,7 @@
 * Intuitive Decryption: Easily decrypt messages back into readable text using the correct password.
 * Clean CustomTkinter Interface: A modern, customizable dark/light mode UI built on top of Tkinter for native look and feel.
 * Encryption using simple-crypt
-* Clipboard Integration: One-click buttons to copy the encrypted/decrypted output to the clipboard.
+
 
 ## 💡 Usage
 
