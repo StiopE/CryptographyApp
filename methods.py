@@ -112,7 +112,13 @@ def encrypt_window():
         key = Fernet.generate_key()
         f = Fernet(key)
         
-        encrypted_message = f.encrypt(message_to_encrypt.encode())      
+        encrypted_message = f.encrypt(message_to_encrypt.encode())  
+         
+        # Store the result, Key and Ciphertext, using DICTIONARIES
+        secure_data = {
+            "ciphertext": f.encrypt(message_to_encrypt.encode()),
+            "key": key
+        }   
         
         # Make a new window to not break the encrypt window
         root3 = ctk.CTk()
@@ -124,15 +130,30 @@ def encrypt_window():
         for i in indices:
             root3.grid_columnconfigure(i, weight=1)
             root3.grid_rowconfigure(i, weight=1)
+            
+        # Function  to copy the outputs
+        def copy_info(info_type):
+            # Look up the info in our dictionary using the key ("ciphertext" or "key")
+            data = secure_data[info_type]
+            
+            # Clear clipboard and add the new text (decoded to string)
+            root3.clipboard_clear()
+            root3.clipboard_append(data.decode('utf-8')) 
+            root3.update()
         
-        # Buttons setting
+        # Buttons message settings
         encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
         encrypted_message_label.grid(row=0, column=0, sticky='ew')
-        
+
         encrypted_message_label.configure(state="normal")
         encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
         encrypted_message_label.configure(state="readonly")
         
+        # Buttons to copy outputs
+        button_copy_msg = ctk.CTkButton(root3, text="Copy Ciphertext", command=lambda: copy_info("ciphertext"))
+        button_copy_msg.grid(row=1, column=0, pady=5)
+        
+        # Buttons key settings
         encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
         encrypted_key_label.grid(row=2, column=0, sticky='ew')
         
@@ -140,8 +161,9 @@ def encrypt_window():
         encrypted_key_label.insert(0, f'Key used to encrypt: {key}')
         encrypted_key_label.configure(state="readonly")
         
-        warning_message_label = ctk.CTkLabel(root3, text="Copy the key to ensure decryption")
-        warning_message_label.grid(row=3, column=0)
+        # Buttons to copy key
+        button_copy_key = ctk.CTkButton(root3, text="Copy Key", command=lambda: copy_info("key"))
+        button_copy_key.grid(row=3, column=0, pady=5)
         
         root3.mainloop()
     
