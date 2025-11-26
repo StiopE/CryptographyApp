@@ -33,38 +33,35 @@ def init_app():
 
     root.mainloop()
 
+# Function to use the key and ciphertext
+def decrypt(entry_password_widget, entry_decrypt_widget):
+    # Get the values from the widgets passed to this function
+    key = entry_password_widget.get()
+    ciphertext = entry_decrypt_widget.get()
+    
+    # Use the values ciphertext and key for decryption
+    f = Fernet(key.encode())
+    decrypted_bytes = f.decrypt(ciphertext.encode())
+    decrypted_plaintext = decrypted_bytes.decode()
+    
+    # Create the results window
+    root4 = ctk.CTk()
+    root4.title = "Decrypted message"
+    root4.geometry('200x200')
+    
+    # Configure grid
+    indices = [0, 1, 2, 3, 4] 
+    for i in indices:
+        root4.grid_columnconfigure(i, weight=1)
+        root4.grid_rowconfigure(i, weight=1)
+    
+    final_decrypted_message = ctk.CTkLabel(root4, text=f'Decrypted message: {decrypted_plaintext}')
+    final_decrypted_message.grid(row=0, column=1)
+    
+    root4.mainloop()
+
 # Open decryptic window
 def decrypt_window():
-    # Function to decrypt the ciphertext using the key
-    def decrypt():
-        # Making new window for decrypt
-        root4 = ctk.CTk()
-        root4.title="Decrypted message"
-        root4.geometry('200x200')
-        
-        # Root window using LIST
-        indices = [0, 1, 2, 3, 4] 
-        for i in indices:
-            root4.grid_columnconfigure(i, weight=1)
-            root4.grid_rowconfigure(i, weight=1)
-        
-        # Make the key into bytes
-        key = entry_password.get()
-        ciphertext = entry_decrypt.get()
-        
-        f = Fernet(key.encode())
-        
-        # Decrypt ciphertext into bytes
-        decrypted_bytes = f.decrypt(ciphertext.encode())
-        
-        # Plaintext decrypted_bytes
-        decrypted_plaintext = decrypted_bytes.decode()
-        
-        final_decrypted_message = ctk.CTkLabel(root4, text=f'Decrypted message: {decrypted_plaintext}')
-        final_decrypted_message.grid(row=0, column=1)
-        
-        root4.mainloop()
-    
     # System settings 
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -97,76 +94,75 @@ def decrypt_window():
     entry_password = ctk.CTkEntry(root2, placeholder_text="Enter key")
     entry_password.grid(row=2, column=3)
     
-    submit_button = ctk.CTkButton(root2, text="Submit", command=decrypt)
+    submit_button = ctk.CTkButton(
+        root2, 
+        text="Submit",
+        command=lambda: decrypt(entry_password, entry_decrypt)
+    )
     submit_button.grid(row=4, column=2)
-    
+
     root2.mainloop()
 
+# Function  to copy the outputs
+def copy_info(data_to_copy, root3_window):
+    # Clear clipboard and add the new text (decoded to string)
+    root3_window.clipboard_clear()
+    root3_window.clipboard_append(data_to_copy.decode('utf-8')) 
+    root3_window.update()
+
+# Function to encrypt the plaintext
+def encrypt(entry_encrypt):
+    # Generate key and ciphertext
+    message_to_encrypt = entry_encrypt.get()
+    key = Fernet.generate_key()
+    f = Fernet(key)
+    encrypted_message = f.encrypt(message_to_encrypt.encode())  
+        
+    # Store the result, Key and Ciphertext, using DICTIONARIES
+    secure_data = {
+        "ciphertext": encrypted_message,
+        "key": key
+    }   
+    
+    # Make a new window to not break the encrypt window
+    root3 = ctk.CTk()
+    root3.title("Ciphertext and Key")
+    root3.geometry('1000x200')
+    
+    # Root window using LIST
+    indices = [0, 1, 2, 3, 4] 
+    for i in indices:
+        root3.grid_columnconfigure(i, weight=1)
+        root3.grid_rowconfigure(i, weight=1)
+    
+    # Buttons message settings
+    encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
+    encrypted_message_label.grid(row=0, column=0, sticky='ew')
+
+    encrypted_message_label.configure(state="normal")
+    encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
+    encrypted_message_label.configure(state="readonly")
+    
+    # Buttons to copy outputs
+    button_copy_msg = ctk.CTkButton(root3, text="Copy Ciphertext", command=lambda: copy_info(secure_data["ciphertext"], root3))
+    button_copy_msg.grid(row=1, column=0, pady=5)
+    
+    # Buttons key settings
+    encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
+    encrypted_key_label.grid(row=2, column=0, sticky='ew')
+    
+    encrypted_key_label.configure(state="normal")
+    encrypted_key_label.insert(0, f'Key used to encrypt: {key}')
+    encrypted_key_label.configure(state="readonly")
+    
+    # Buttons to copy key
+    button_copy_key = ctk.CTkButton(root3, text="Copy Key", command=lambda: copy_info(secure_data["key"], root3))
+    button_copy_key.grid(row=3, column=0, pady=5)
+    
+    root3.mainloop()
 
 # Open encryptic window
-def encrypt_window():
-    # Function to encrypt the plaintext
-    def encrypt():
-        # Generate key and ciphertext
-        message_to_encrypt = entry_encrypt.get()
-        key = Fernet.generate_key()
-        f = Fernet(key)
-        
-        encrypted_message = f.encrypt(message_to_encrypt.encode())  
-         
-        # Store the result, Key and Ciphertext, using DICTIONARIES
-        secure_data = {
-            "ciphertext": f.encrypt(message_to_encrypt.encode()),
-            "key": key
-        }   
-        
-        # Make a new window to not break the encrypt window
-        root3 = ctk.CTk()
-        root3.title("Ciphertext and Key")
-        root3.geometry('1000x200')
-        
-        # Root window using LIST
-        indices = [0, 1, 2, 3, 4] 
-        for i in indices:
-            root3.grid_columnconfigure(i, weight=1)
-            root3.grid_rowconfigure(i, weight=1)
-            
-        # Function  to copy the outputs
-        def copy_info(info_type):
-            # Look up the info in our dictionary using the key ("ciphertext" or "key")
-            data = secure_data[info_type]
-            
-            # Clear clipboard and add the new text (decoded to string)
-            root3.clipboard_clear()
-            root3.clipboard_append(data.decode('utf-8')) 
-            root3.update()
-        
-        # Buttons message settings
-        encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
-        encrypted_message_label.grid(row=0, column=0, sticky='ew')
-
-        encrypted_message_label.configure(state="normal")
-        encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
-        encrypted_message_label.configure(state="readonly")
-        
-        # Buttons to copy outputs
-        button_copy_msg = ctk.CTkButton(root3, text="Copy Ciphertext", command=lambda: copy_info("ciphertext"))
-        button_copy_msg.grid(row=1, column=0, pady=5)
-        
-        # Buttons key settings
-        encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
-        encrypted_key_label.grid(row=2, column=0, sticky='ew')
-        
-        encrypted_key_label.configure(state="normal")
-        encrypted_key_label.insert(0, f'Key used to encrypt: {key}')
-        encrypted_key_label.configure(state="readonly")
-        
-        # Buttons to copy key
-        button_copy_key = ctk.CTkButton(root3, text="Copy Key", command=lambda: copy_info("key"))
-        button_copy_key.grid(row=3, column=0, pady=5)
-        
-        root3.mainloop()
-    
+def encrypt_window():            
     # System settings
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -185,7 +181,6 @@ def encrypt_window():
     # Store font setting in a TUPLE
     header_font_style = ("Helvetica", 20) 
     encrypt_label1 = ctk.CTkLabel(root1, text= "Encryption", font=header_font_style)
-    
     encrypt_label1.grid(row = 0, column = 2)
     
     label_message = ctk.CTkLabel(root1, text="Enter text to encrypt:")
@@ -194,7 +189,7 @@ def encrypt_window():
     entry_encrypt = ctk.CTkEntry(root1, placeholder_text="Enter message")
     entry_encrypt.grid(row = 1, column=3)
     
-    submit_button = ctk.CTkButton(root1, text="Submit", command = encrypt)
+    submit_button = ctk.CTkButton(root1, text="Submit", command=lambda: encrypt(entry_encrypt))
     submit_button.grid(row=3, column=2)
     
     root1.mainloop()
