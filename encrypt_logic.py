@@ -46,7 +46,7 @@ def encrypt(entry_encrypt):
     
     # Store it in a JSON file.
     try:
-        with open('encryption_data.json', 'w') as json_file:
+        with open('encryption_data.json', 'a') as json_file:
             json.dump(secure_data, json_file, indent=4)
         logging.info("Encryption successful: Data saved to encryption_data.json")
     except IOError as e:
@@ -121,7 +121,7 @@ def encrypt_window(previous_root):
     encrypt_label1 = ctk.CTkLabel(root1, text= "Encryption", font=header_font_style)
     encrypt_label1.grid(row = 1, column = 2, pady=(10, 20))
     
-    label_message = ctk.CTkLabel(root1, text="Enter text to encrypt:")
+    label_message = ctk.CTkLabel(root1, text="Encrypt ->")
     label_message.grid(row=2, column=1)
     
     entry_encrypt = ctk.CTkEntry(root1, placeholder_text="Enter message")
