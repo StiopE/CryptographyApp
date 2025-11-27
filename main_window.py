@@ -2,6 +2,7 @@ import customtkinter as ctk
 from cryptography.fernet import Fernet
 import encrypt_logic  as enc
 import decrypt_logic as dec
+import file_open
 
 def reset_and_go_to_main_menu(current_window):
     # Destroys the current window, and restart the main menu.
@@ -36,10 +37,12 @@ def init_app():
     decryptOption = ctk.CTkButton(root, text="Decrypt", command=lambda: dec.decrypt_window(root))
     decryptOption.grid(row=3, column=2, pady=10)
     
-    button_json_open = ctk.CTkButton(root, text="Open JSON file")
+    button_json_open = ctk.CTkButton(root, text="Open JSON file", command= lambda: file_open.open_json("encryption_data.json"))
+    button_json_open.grid(row=4, column=2)
+    
     
     exit_button = ctk.CTkButton(root, text="Exit", command=root.destroy,fg_color="red")
-    exit_button.grid(row=4, column=2, pady=(20, 10))
+    exit_button.grid(row=5, column=2, pady=(20, 10))
 
     # user_string_input = ctk.CTkEntry(root, placeholder_text="Enter message to encrypt", height=50, width=200)
     # user_string_input.pack(pady=10)
