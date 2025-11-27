@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from cryptography.fernet import Fernet
+import json
 
 # Function  to copy the outputs
 def copy_info(data_to_copy, root3_window):
@@ -18,9 +19,17 @@ def encrypt(entry_encrypt):
         
     # Store the result, Key and Ciphertext, using DICTIONARIES
     secure_data = {
-        "ciphertext": encrypted_message,
-        "key": key
+        "ciphertext": encrypted_message.decode(),
+        "key": key.decode()
     }   
+    
+    # Store it in a JSON file.
+    # Using 'w' mode will overwrite the file each time, which is what you wanted.
+    try:
+        with open('encryption_data.json', 'w') as json_file:
+            json.dump(secure_data, json_file, indent=4)
+    except IOError as e:
+        print(f"Error writing to file: {e}")
     
     # Make a new window to not break the encrypt window
     root3 = ctk.CTk()

@@ -6,11 +6,14 @@ def decrypt(entry_password_widget, entry_decrypt_widget):
     # Get the values from the widgets passed to this function
     key = entry_password_widget.get()
     ciphertext = entry_decrypt_widget.get()
-    
-    # Use the values ciphertext and key for decryption
-    f = Fernet(key.encode())
-    decrypted_bytes = f.decrypt(ciphertext.encode())
-    decrypted_plaintext = decrypted_bytes.decode()
+
+    try:
+        # Use the values ciphertext and key for decryption
+        f = Fernet(key.encode())
+        decrypted_bytes = f.decrypt(ciphertext.encode())
+        decrypted_plaintext = decrypted_bytes.decode()
+    except Exception as e:
+        decrypted_plaintext = f"Error: Decryption failed. Check key and message. ({e})"
     
     # Create the results window
     root4 = ctk.CTk()
