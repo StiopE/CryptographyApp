@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from cryptography.fernet import Fernet
+import main_window
 
 # Function to use the key and ciphertext
 def decrypt(entry_password_widget, entry_decrypt_widget):
@@ -29,7 +30,10 @@ def decrypt(entry_password_widget, entry_decrypt_widget):
     root4.mainloop()
 
 # Open decryptic window
-def decrypt_window():
+def decrypt_window(previous_root):
+    # Destroy previous window
+    previous_root.destroy()
+    
     # System settings 
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -45,28 +49,31 @@ def decrypt_window():
         root2.grid_columnconfigure(i, weight=1)
         root2.grid_rowconfigure(i, weight=1)
     
+    # Back button ( soft restart)
+    back_button= ctk.CTkButton(root2, text="◀ Back",command=lambda: main_window.reset_and_go_to_main_menu(root2), width=100, fg_color="gray", hover_color="darkgray")
+    back_button.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+    # Reset button (full soft restart)
+    reset_button = ctk.CTkButton(root2, text="⟲ Reset App",command=lambda: main_window.reset_and_go_to_main_menu(root2), width=120, fg_color="red", hover_color="#b30000")
+    reset_button.grid(row=0, column=4, padx=10, pady=10, sticky="ne")
+    
     # Create buttons using TUPLE
     header_font_style = ("Helvetica", 20) 
     decrypt_label2 = ctk.CTkLabel(root2, text= "Encryption", font=header_font_style)
-    decrypt_label2.grid(row = 0, column = 2)
+    decrypt_label2.grid(row = 1, column = 2, pady=(10, 20))
    
     label_message = ctk.CTkLabel(root2, text="Enter text to decrypt:")
-    label_message.grid(row=1, column=1)
+    label_message.grid(row=2, column=1)
     
     entry_decrypt = ctk.CTkEntry(root2, placeholder_text="Enter message")
-    entry_decrypt.grid(row = 1, column=3)
+    entry_decrypt.grid(row = 2, column=3)
     
     label_password = ctk.CTkLabel(root2, text="Enter key:")
-    label_password.grid(row=2, column=1)
+    label_password.grid(row=3, column=1)
     
     entry_password = ctk.CTkEntry(root2, placeholder_text="Enter key")
-    entry_password.grid(row=2, column=3)
+    entry_password.grid(row=3, column=3)
     
-    submit_button = ctk.CTkButton(
-        root2, 
-        text="Submit",
-        command=lambda: decrypt(entry_password, entry_decrypt)
-    )
-    submit_button.grid(row=4, column=2)
+    submit_button = ctk.CTkButton(root2, text="Submit", command=lambda: decrypt(entry_password, entry_decrypt))
+    submit_button.grid(row=4, column=2, pady=(30, 0))
 
     root2.mainloop()
