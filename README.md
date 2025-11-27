@@ -6,6 +6,16 @@
 * Clean CustomTkinter Interface: A modern, customizable dark/light mode UI built on top of Tkinter for native look and feel.
 * Encryption using simple-crypt
 
+## 📸 Screenshots
+<img width="593" height="426" alt="Screenshot 2025-11-28 at 00 04 56" src="https://github.com/user-attachments/assets/8b46e650-ef3f-493c-aebc-ca7e78bca4ad" />
+<img width="591" height="422" alt="Screenshot 2025-11-28 at 00 05 07" src="https://github.com/user-attachments/assets/91b28f84-b4d0-44ae-84ac-edfaac7e326a" />
+<img width="993" height="221" alt="Screenshot 2025-11-28 at 00 05 14" src="https://github.com/user-attachments/assets/770c194a-6b3a-4ca8-a542-c42b931525ed" />
+<img width="588" height="398" alt="Screenshot 2025-11-28 at 00 15 34" src="https://github.com/user-attachments/assets/e937354b-e068-407d-b6e0-33896e58083a" />
+<img width="282" height="250" alt="Screenshot 2025-11-28 at 00 16 12" src="https://github.com/user-attachments/assets/1c8dd05b-eb34-4867-b8f5-9f625821c420" />
+
+
+
+
 ## 🏃 How to run the project
 
 ```bash
@@ -28,12 +38,11 @@ pip install -r requirements.txt
 * Click Encrypt to generate the ciphertext (the encrypted message).
 * Click Decrypt to convert the ciphertext back to the original message.
 * Click 'Open JSON file' to view history of saved ciphertexts and keys
+* Exit to terminate application
 
 ## 🎥 Video of usage
 
-https://github.com/user-attachments/assets/15110ccb-8a73-4e66-abaa-5925465aabf1
+https://github.com/user-attachments/assets/11400453-b0a4-42ef-be78-905acd9f8cda
 
 ### Authors: Stepan Panteleev & Bruno Triano
-
-
 
