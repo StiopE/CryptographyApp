@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet, InvalidToken
 import main_window
 import re
 import logging
