@@ -31,6 +31,9 @@ pip install -r requirements.txt
 
 ## 🎥 Video of usage
 
-
+https://github.com/user-attachments/assets/15110ccb-8a73-4e66-abaa-5925465aabf1
 
 ### Authors: Stepan Panteleev & Bruno Triano
+
+
+
