@@ -1,25 +1,62 @@
 import customtkinter as ctk
 from cryptography.fernet import Fernet
 import main_window
+import re
+import logging
+
+# Logging configurations
+logging.basicConfig(
+    filename='app.log', 
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# Core logic
+def core_decrypt_logic(key_str, ciphertext_str):
+    # 1. DATA VALIDATION WITH REGEX
+    fernet_pattern = r'^[A-Za-z0-9\-_=]+$'
+    
+    if not key_str or not ciphertext_str:
+        logging.warning("Decryption failed: Empty input fields.")
+        return False, "Error: Empty input fields."
+
+    if not re.match(fernet_pattern, key_str):
+        logging.warning(f"Decryption failed: Invalid Key Format. Input: {key_str[:5]}...") # Log only first 5 chars for safety
+        return False, "Error: Key format is invalid (must be Base64)."
+
+    # Error handling with try
+    try:
+        key_bytes = key_str.encode()
+        cipher_bytes = ciphertext_str.encode()
+        
+        f = Fernet(key_bytes)
+        decrypted_bytes = f.decrypt(cipher_bytes)
+        
+        logging.info("Decryption successful.")
+        return True, decrypted_bytes.decode()
+        
+    except InvalidToken:
+        logging.error("Decryption error: Invalid Token (Key does not match Ciphertext).")
+        return False, "Error: Invalid Token (Wrong Key or Corrupted Data)."
+    except ValueError as e:
+        logging.error(f"Decryption error: Value Error - {e}")
+        return False, "Error: Value Error (Encoding issue)."
+    except Exception as e:
+        logging.critical(f"Decryption error: Unexpected Exception - {e}")
+        return False, f"Unknown Error: {str(e)}"
 
 # Function to use the key and ciphertext
 def decrypt(entry_password_widget, entry_decrypt_widget):
     # Get the values from the widgets passed to this function
-    key = entry_password_widget.get()
-    ciphertext = entry_decrypt_widget.get()
+    key = entry_password_widget.get().strip()
+    ciphertext = entry_decrypt_widget.get().strip()
 
-    try:
-        # Use the values ciphertext and key for decryption
-        f = Fernet(key.encode())
-        decrypted_bytes = f.decrypt(ciphertext.encode())
-        decrypted_plaintext = decrypted_bytes.decode()
-    except Exception as e:
-        decrypted_plaintext = f"Error: Decryption failed. Check key and message. ({e})"
+    success, result_text = core_decrypt_logic(key, ciphertext)
     
     # Create the results window
     root4 = ctk.CTk()
-    root4.title = "Decrypted message"
-    root4.geometry('200x200')
+    root4.title = "Decryption Result"
+    root4.geometry('400x200')
     
     # Configure grid
     indices = [0, 1, 2, 3, 4] 
@@ -27,8 +64,10 @@ def decrypt(entry_password_widget, entry_decrypt_widget):
         root4.grid_columnconfigure(i, weight=1)
         root4.grid_rowconfigure(i, weight=1)
     
-    final_decrypted_message = ctk.CTkLabel(root4, text=f'Decrypted message: {decrypted_plaintext}')
-    final_decrypted_message.grid(row=0, column=1)
+    text_color = "black" if success else "red"
+    
+    final_decrypted_message = ctk.CTkLabel(root4, text=f'{result_text}', text_color=text_color, wraplength=350)
+    final_decrypted_message.grid(row=0, column=2, pady=20)
     
     root4.mainloop()
 
@@ -61,7 +100,7 @@ def decrypt_window(previous_root):
     
     # Create buttons using TUPLE
     header_font_style = ("Helvetica", 20) 
-    decrypt_label2 = ctk.CTkLabel(root2, text= "Encryption", font=header_font_style)
+    decrypt_label2 = ctk.CTkLabel(root2, text= "Decryption", font=header_font_style)
     decrypt_label2.grid(row = 1, column = 2, pady=(10, 20))
    
     label_message = ctk.CTkLabel(root2, text="Enter text to decrypt:")

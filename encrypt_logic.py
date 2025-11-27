@@ -2,21 +2,41 @@ import customtkinter as ctk
 from cryptography.fernet import Fernet
 import main_window
 import json
+import logging
+
+
+# This creates or appends to the file "app.log"
+logging.basicConfig(
+    filename='app.log', 
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# Core logic for pytest
+def core_encrypt_logic(plain_text):
+    # Pure function, that takes string input and returns key and ciphertext.
+    key = Fernet.generate_key()
+    f = Fernet(key)
+    encrypted_message = f.encrypt(plain_text.encode())
+    return key, encrypted_message
 
 # Function  to copy the outputs
 def copy_info(data_to_copy, root3_window):
     # Clear clipboard and add the new text (decoded to string)
-    root3_window.clipboard_clear()
-    root3_window.clipboard_append(data_to_copy.decode('utf-8')) 
-    root3_window.update()
+    try:
+        root3_window.clipboard_clear()
+        text_data = data_to_copy if isinstance(data_to_copy, str) else data_to_copy.decode('utf-8')
+        root3_window.clipboard_append(text_data) 
+        root3_window.update()
+        logging.info("User copied data to clipboard.")
+    except Exception as e:
+        logging.error(f"Clipboard copy failed: {e}")
 
 # Function to encrypt the plaintext
 def encrypt(entry_encrypt):
     # Generate key and ciphertext
     message_to_encrypt = entry_encrypt.get()
-    key = Fernet.generate_key()
-    f = Fernet(key)
-    encrypted_message = f.encrypt(message_to_encrypt.encode())  
+    key, encrypted_message = core_encrypt_logic(message_to_encrypt)
         
     # Store the result, Key and Ciphertext, using DICTIONARIES
     secure_data = {
@@ -25,11 +45,13 @@ def encrypt(entry_encrypt):
     }   
     
     # Store it in a JSON file.
-    # Using 'w' mode will overwrite the file each time, which is what you wanted.
     try:
         with open('encryption_data.json', 'w') as json_file:
             json.dump(secure_data, json_file, indent=4)
+        logging.info("Encryption successful: Data saved to encryption_data.json")
     except IOError as e:
+        # Log the specific error
+        logging.error(f"File I/O Error during encryption save: {e}")
         print(f"Error writing to file: {e}")
     
     # Make a new window to not break the encrypt window
@@ -44,9 +66,8 @@ def encrypt(entry_encrypt):
         root3.grid_rowconfigure(i, weight=1)
     
     # Buttons message settings
-    encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'Encrypted Message: {encrypted_message}', state="readonly", width=1000)
+    encrypted_message_label = ctk.CTkEntry(root3, placeholder_text=f'{encrypted_message}', state="readonly", width=1000)
     encrypted_message_label.grid(row=0, column=0, sticky='ew')
-
     encrypted_message_label.configure(state="normal")
     encrypted_message_label.insert(0, f'Encrypted Message: {encrypted_message}')
     encrypted_message_label.configure(state="readonly")
@@ -56,9 +77,8 @@ def encrypt(entry_encrypt):
     button_copy_msg.grid(row=1, column=0, pady=5)
     
     # Buttons key settings
-    encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'Key used to encrypt: {key}', state='readonly', width=1000)
+    encrypted_key_label = ctk.CTkEntry(root3, placeholder_text = f'{key}', state='readonly', width=1000)
     encrypted_key_label.grid(row=2, column=0, sticky='ew')
-    
     encrypted_key_label.configure(state="normal")
     encrypted_key_label.insert(0, f'Key used to encrypt: {key}')
     encrypted_key_label.configure(state="readonly")
