@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from cryptography.fernet import Fernet
+import main_window
 import json
 
 # Function  to copy the outputs
@@ -69,7 +70,9 @@ def encrypt(entry_encrypt):
     root3.mainloop()
 
 # Open encryptic window
-def encrypt_window():            
+def encrypt_window(previous_root):
+    # Destroy previous window
+    previous_root.destroy()            
     # System settings
     ctk.set_appearance_mode("System")
     ctk.set_default_color_theme("blue")
@@ -85,18 +88,26 @@ def encrypt_window():
         root1.grid_columnconfigure(i, weight=1)
         root1.grid_rowconfigure(i, weight=1)
     
+    # Back Button (soft restart)
+    back_button = ctk.CTkButton(root1, text="◀ Back", command=lambda: main_window.reset_and_go_to_main_menu(root1), width=100, fg_color="gray", hover_color="darkgray")
+    back_button.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+    
+    # Reset Button (full soft restart)
+    reset_button = ctk.CTkButton(root1, text="⟲ Reset App", command=lambda: main_window.reset_and_go_to_main_menu(root1), width=120, fg_color="red", hover_color="#b30000")
+    reset_button.grid(row=0, column=4, padx=10, pady=10, sticky="ne")
+    
     # Store font setting in a TUPLE
     header_font_style = ("Helvetica", 20) 
     encrypt_label1 = ctk.CTkLabel(root1, text= "Encryption", font=header_font_style)
-    encrypt_label1.grid(row = 0, column = 2)
+    encrypt_label1.grid(row = 1, column = 2, pady=(10, 20))
     
     label_message = ctk.CTkLabel(root1, text="Enter text to encrypt:")
-    label_message.grid(row=1, column=1)
+    label_message.grid(row=2, column=1)
     
     entry_encrypt = ctk.CTkEntry(root1, placeholder_text="Enter message")
-    entry_encrypt.grid(row = 1, column=3)
+    entry_encrypt.grid(row = 2, column=3)
     
     submit_button = ctk.CTkButton(root1, text="Submit", command=lambda: encrypt(entry_encrypt))
-    submit_button.grid(row=3, column=2)
+    submit_button.grid(row=4, column=2, pady=(30, 0))
     
     root1.mainloop()
